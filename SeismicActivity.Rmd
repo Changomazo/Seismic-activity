@@ -1,0 +1,42 @@
+---
+title: "Seismic activity in Italy"
+author: "Albert Blanchart"
+date: "January 19, 2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The News of the week
+
+During this week Italy has been striken by a series of earthquakes which have spread around the areas of Perugia, Viso and Rome. CNN has a dedicated video about this in its [webpage](http://edition.cnn.com/2016/10/31/europe/italy-earthquake-norcia-explainer/). So in this short markdown document we will be ploting the region of Italy and pointing out just a few of the earthquakes that took place on thursday the 19th nof Januari. Actually there has been registered up to 186 earthquakes in the regions of L'Aquila, Rieti, Perugia and Rome. More detailed information can be obtained in the [Volcano Discovery Webpage](https://www.volcanodiscovery.com/earthquakes/italy.html) where all seisms are registrered lived!
+
+## The necessary packages to perform a nice plot
+Well as you all know this peer-graded assignment is all about Leaflet (Since R Markdown has been covered in opther courses and just a few more details were revealed in this session). We all love leaflet, it does awesome things with the maps, so lets going to load in R:
+```{r packages, message=FALSE}
+library(leaflet)
+library(dplyr)
+```
+And now we will start building our map:
+```{r Italy, echo=FALSE, message=FALSE}
+seism <- data.frame(name = c("L`Aquila", "L`Aquila", "Rieti", "Rome", "Rieti", "Macerata", "Perugia", "Macerata"), lat = c(42.5252, 42.5685, 42.5793, 42.59, 42.5793, 42.8337, 43.0252, 42.9017), lng = c(13.3118, 13.2728, 13.3018, 13.3, 13.2893, 12.9652, 13.0358, 13.1917), Depth = c(11.9, 15.8, 13.3, 10, 10.3, 11.7, 8.5, 9.7))
+
+mag <- c("magnitude: 2", "magnitude: 2.1", "magnitude: 2", "magnitude: 3.4", "magnitude: 2.5", "magnitude: 2.2", "magnitude: 2.8", "magnitude: 2.8")
+
+seism %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(popup = mag) %>%
+  addCircles(weight = 5, radius = seism$Depth * 400, color = c("red", "red", "blue", "green", "blue", "orange", "purple", "orange")) %>%
+  addLegend(labels = unique(seism$name), colors = c("red", "blue", "green", "orange", "purple"))
+```
+
+So the different regions have been colored and the popups show the magnitude of the seisms, moreover the radius of each circle shows the Depth. Note that in order to visualize the radius I just multiply the original value by 400 so all the circles are visibles in the whole region, *values of 10 Km are not visible in such a broad area :>*.
+
+For those interested in see the code you can find the .Rmd, .md and .htlm files in my git repository:
+
+[(https://github.com/Changomazo/Seismic-activity)]
